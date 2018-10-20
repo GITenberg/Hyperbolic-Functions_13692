@@ -1,4 +1,21 @@
+%%================================================
+%% this file = nickalls13692vers4.tex --> fixes the index
+%% Project Gutenberg book No 13692 
+%%================================================
+%% The gutenberg file 13692-t.tex has been modified by 
+%% RWD Nickalls (dick@nickalls.org) June 26, 2018
+%% in order to implement the Index and TOC correctly
+%% ---search for `RWD Nickalls' to see the changes i have made 
+%% in this LaTeX file.
+%%
+%% This work was done on a Debian Linux platform using the 2017 TeXLive system.
+%% For details of LaTeX see: www.tug.org.
+%%
+%% To use the hyperlinks use Acrobat Reader for best results
+%% (because many ordinary pdf viewers fail to implement all the pdf tools)
+%%==============================================
 \documentclass[oneside]{book}
+
 \usepackage[latin1]{inputenc}
 \usepackage[reqno]{amsmath}
 \usepackage{amssymb,graphicx,yfonts}
@@ -18,6 +35,149 @@
 \DeclareMathOperator{\sg}{sg}
 \DeclareMathOperator{\sn}{sn}
 \DeclareMathOperator{\tg}{tg}
+
+
+%%%=======================begin{Nickalls}======================================
+\usepackage{comment}
+\begin{comment}
+%%
+%% RWD Nickalls
+%% EMAIL: dick@nickalls.org
+%% July 5, 2018
+%%
+Original gutenberg file modified by RWD Nickalls (dick@nickalls.org) July 2018
+to facilitate  makeindex, hyperref links and better margin alignment,
+and to enable working Index entry in TOC and in PDF bookmarks
+
+In order to see all changes by RWD Nickalls, then search the 
+.tex file for instances of RWD Nickalls
+
+%%============introduction========================
+%% These commands help make makeindex work correctly with hyperref.
+%% Really one has to either (a) edit the .ind file (awkward to do on the fly)
+%% or (b) edit the <theindex> environment to include the \columnseprule and the 
+%% \addcontentsline{toc}... line. Here I have fashioned a 
+%% new working  <theindex> environment to be used with the .tex file.
+%% 
+%%=============notes==============================
+
+%% The standard environment <theindex> is defined in the LaTeX book.cls.
+%% This has been modified it by Springer (for their open source svmono.cls, which
+%% is one of my favourite classes). 
+%% I have further modified it by (a) adding \columnseprule, and (b) deleting several 
+%% of the Springer commands so it works OK here in the gutenberg case (book 13692): 
+%%
+%% NOTE that the \addcontentsline{toc}... needs to be /inside/ the <theindex> environment 
+%% to work properly, as here:
+%% I don't fully understand how all these commands work, but they fix the gutenberg 
+%% index problems OK. 
+%%
+%% to make the index work from the PDF bookmarks 
+%% (1) put \printindex  command AFTER \backmatter
+%%
+%% to create the pdf file with hyperlinks and index using 
+%% the makeindex TeX utlilty:
+%% (A) run pdflatex TWICE
+%% (B) run the command:     makeindex  nickalls13692vers4.idx
+%% (C) run pdflatex TWICE again.
+%%
+%% see the book: The LaTeX Companion (2004), 2nd ed: (makeindex = p 649)
+%% see the TUG website (www.tug.org) for details of LaTeX implementations
+%% eg TeXLive and the annual TeX Collection DVD for all platforms.
+%% 
+%%
+%% **Remaining problems**: 
+%% The hyperlinks from text (in the articles) to particular pages mostly fail
+%% to locate the correct page --- this is because
+%% sections \& subsections are not used in this book (ie these page links home in on the 
+%% first page of the associated ``chapter'' etc. since  Chapters are the only systematic 
+%% reference points used in this LaTeX typesetting
+%% NB I have fixed one series of pagerefs as an example, (see Line 2510) and have left 
+%% some notes there (search for  \subsubsection{}   ).
+%% The failure of the links to the Tables in the ListofTables  is due to  
+%% the same reason---I have now fixed these too.
+%% I have also fixed some indexing errors as well.
+%%
+%% Please send any feedback to Dick Nickalls (dick@nickalls.org).
+\end{comment}
+
+
+%%============
+\makeatletter
+%% RWD Nickalls (dick@nickalls.org) July 2018
+%%
+%%  The following commands were extracted (and modified) 
+%%  from: svmono.cls    - v 4.17, 2006 (Springer)
+%%  an open-source monograph LaTeX class freely available from 
+%%  the Springer website.
+%%
+\def\indexname{Index}%
+%%
+\renewenvironment{theindex}{%
+                \columnseprule=0.4pt %% this makes the vertical line in the index
+                \columnsep 1cc
+                \@nobreaktrue
+                \begin{multicols}{2}[\chapter*{\indexname}]%
+                   \markboth{\MakeUppercase\indexname}{\MakeUppercase\indexname}%
+                   \addcontentsline{toc}{chapter}{\indexname}%
+                   \flushbottom
+                   \parindent\z@
+                   \rightskip\z@ \@plus 40\p@
+                   \parskip\z@ \@plus .3\p@\relax
+                   \flushbottom
+                   \let\item\@idxitem
+                   \def\,{\relax\ifmmode\mskip\thinmuskip
+                             \else\hskip0.2em\ignorespaces\fi}%
+                   \normalfont}
+                {\end{multicols}\clearpage}
+%%
+%%
+\def\idxquad{\hskip 10\p@}% space that divides entry from number
+%%
+\def\@idxitem{\par\setbox0=\hbox{--\,--\,--\enspace}%
+                  \hangindent\wd0\relax}
+                  
+\def\subitem{\par\noindent\setbox0=\hbox{--\enspace}% second order
+                \kern\wd0\setbox0=\hbox{--\,--\,--\enspace}%
+                \hangindent\wd0\relax}% indexentry
+
+\def\subsubitem{\par\noindent\setbox0=\hbox{--\,--\enspace}% third order
+                \kern\wd0\setbox0=\hbox{--\,--\,--\enspace}%
+                \hangindent\wd0\relax}% indexentry
+
+\def\indexspace{\par \vskip 10\p@ \@plus5\p@ \@minus3\p@\relax}
+%%
+\makeatother
+%===========
+
+\usepackage{multicol} %% required by makeindex  to make 2 cols
+\usepackage{ifpdf}
+\ifpdf
+    \usepackage[unicode]{hyperref}
+    \hypersetup{hyperindex, 
+                hyperfigures=true, 
+                hyperfootnotes, 
+                colorlinks, 
+                urlcolor=blue,  
+                linkcolor=blue,
+                bookmarksopenlevel=0,  %%was 1, 0,  %% (parts=-1, book=0, chap=1, article=2)
+                bookmarksnumbered=true,
+                bookmarkstype=toc,
+                pdfpagelayout=SinglePage,
+                %---------------------
+                pdftitle={Hyperbolic functions},
+                pdfauthor={James McMahon (1906) },
+                pdfsubject={mathematics},
+                pdfkeywords={Project Gutenberg, book No=13692},
+                pdfcreator=pdfLaTeX,
+                } 
+    \usepackage[verbose]{microtype} %% for better margin alignment
+    \usepackage{cmap}               %% makes the pdf searchable
+\fi
+%%==============end{Nickalls}====================================================    
+
+
+
 
 \begin{document}
 
@@ -71,6 +231,11 @@ functions}}
 
 \frontmatter
 
+%%===========================================
+%% RWD Nickalls (dick@nickalls.org)
+\ifpdf\pdfbookmark[0]{Title}{Title}\fi  %% 1
+%%===========================================
+
 \begin{center}
 \noindent \Large MATHEMATICAL MONOGRAPHS.
 
@@ -78,7 +243,13 @@ functions}}
 \normalsize \textsc{MANSFIELD MERRIMAN and ROBERT S. WOODWARD.}
 
 \bigskip\bigskip\huge
-No. 4.
+
+%------------------------
+%% RWD Nickalls  (July 2018)
+%% use a backslash after the No.\ to force an inter word space here
+%% ie not an end-of-sentence space here.
+No.\ 4.
+%-----------------------
 
 \bigskip
 HYPERBOLIC FUNCTIONS.
@@ -241,6 +412,13 @@ hyperbolic sector is shown in the Appendix.
 
 \enlargethispage*{1000pt}
 \smallskip \footnotesize December, 1905. \normalsize
+
+
+%%===========================================
+%% RWD Nickalls (dick@nickalls.org)
+\cleardoublepage
+\ifpdf\pdfbookmark[0]{Contents}{Contents}\fi
+%%===========================================
 
 \tableofcontents
 \listoftables
@@ -451,7 +629,7 @@ sectorial measure $\dfrac{S_1}{K_1}$. These ratios are constant both
 in magnitude and sign for all sectors of the same measure and
 species wherever these may be situated (Art.~3). Hence there exists
 a functional relation between the sectorial measure and each of its
-characteristic ratios.\label{sectoral measures}\index{Characteristic
+characteristic ratios.\label{sectoral-measures}\index{Characteristic
 ratios}\index{Ratios!characteristic}
 
 \chapter{Ratios Expressed as Triangle-measures.}
@@ -1227,6 +1405,7 @@ e^x = 1 + x + \frac{1}{2!} x^2 + \frac{1}{3!} x^3 + \ldots
 This will be more fully explained in treating of complex numbers,
 Arts.~28, 29.
 
+\subsubsection{} %% RWD Nickalls  a hook for the \label below
 \small \begin{enumerate}
 \item[Prob.~37.] Show that the properties of the hyperbolic functions
 could be placed on a purely algebraic basis by starting with
@@ -1420,8 +1599,9 @@ equal to $\log 2$.
 \end{align*}
 \end{enumerate} \normalsize
 
-\chapter{The Gudermanian Function.}\label{gudermanian}%
-\label{Gudermanian!function}
+\chapter{The Gudermanian Function.}
+\label{gudermanian}%
+\index{Gudermanian!function}
 
 The correspondence of sectors of the same species was discussed in
 Arts.~1--4. It is now convenient to treat of the correspondence that
@@ -2173,7 +2353,8 @@ the hyperbolic sine and tangent are pure imaginaries.
 
 The following table exhibits the variation of $\sinh u$, $\cosh u$.
 $\tanh u$, $\exp u$, as $u$ takes a succession of pure imaginary
-values.\index{Tables}
+values.
+%%\index{Tables}  %% RWD Nickalls moved \index{Tables} into table footnote below
 
 \begin{minipage}{10cm}{
 \begin{center}
@@ -2201,9 +2382,12 @@ values.\index{Tables}
 \hline
 \end{tabular}
 \footnotetext{In this table $.7$ is written for
-$\frac{1}{2}\sqrt{2}, = .707\dotsc$.}
+$\frac{1}{2}\sqrt{2}, = .707\dotsc$.\index{Tables}}
+%% RWD Nickalls: I have moved the above \index{} command to here%
 \end{center}
 }\end{minipage}
+
+
 
 \small \begin{enumerate}
 \item[Prob.~81.] Prove the following identities:
@@ -2246,6 +2430,7 @@ that for $\sinh x$:
             \left(1 + \frac{x^2}{3^2\pi^2}\right) \ldots.
 \end{align*}\index{Product-series}
 \end{enumerate} \normalsize
+
 
 \chapter{Functions of $x+iy$ in the Form $X+iY$.}
 
@@ -2319,8 +2504,20 @@ account of the periodicity of the functions.}%
 \index{Kennelly's chart} A similar chart can be drawn for $\sinh
 (x+iy)$, as indicated in Prob.~85.
 
-\medskip Periodicity of Hyperbolic
-Functions.\label{periodicity of hyperbolic functions}---The
+\medskip 
+
+\begin{comment}
+RWD Nickalls :  I have inserted the following `empty'  subsubsection{} command,
+---which is effectively invisible. LaTeX requires some form of `section' command 
+as an anchor in order to make the  pageref links work correctly.  Otherwise, the 
+links will just go to the page of the current  chapter (which is one page earlier 
+in this particular case). 
+Note that this particular \label{} is used (pointed to) by three other locations
+using the \pageref{period-hyp-funct} command. These 3 links all work correctly now.
+\end{comment}
+
+\subsubsection*{}% 
+Periodicity of Hyperbolic Functions. \label{period-hyp-funct}---The
 functions $\sinh u$ and $\cosh u$ have the pure imaginary period
 $2i\pi$. For
 \begin{align*}
@@ -3124,7 +3321,7 @@ and magnitude of required current.\index{Phase angle}
 \bar{e}= 1000 \cosh (.04 + 1.6j) = 1000j \sinh (.04 + .03j),
 \end{equation*}
 by subtracting $\frac{1}{2}\pi j$, and applying
-page~\pageref{periodicity of hyperbolic functions}. Interpolation
+page~\pageref{period-hyp-funct}. Interpolation
 between $\sinh (0 + 0j)$ and $\sinh (0 +.1j)$ gives
 \begin{align*}
 \sinh ( 0 + .03j) &= .00000 + .02995j. \\
@@ -3200,6 +3397,8 @@ equations (65), (66) are to be modified; and prove that
 \end{equation*}
 where $\bar{E}_0$, $\bar{I}_0$ refer to the sending end.
 \end{enumerate}\index{Complex numbers!Applications of|)} \normalsize
+
+
 
 \chapter{Miscellaneous Applications.}
 
@@ -3280,6 +3479,8 @@ worked out in Laisant, Essai sur les fonctions hyperboliques.%
 \index{Applications|)}\index{Hyperbolic functions!applictions of|)}%
 \index{Physical problems|)}
 
+
+
 \chapter{Explanation of Tables.}\index{Complex numbers!Tables}%
 \index{Tables}
 
@@ -3303,7 +3504,7 @@ between the entries under $x =.8$ and $x =.9$, as before; then by
 interpolation between $\cosh (.82 + 1.3i)$ and $\cosh (.82 + 1.4i)$
 find $\cosh(.82 + 1.34i)$, in which $x$ is kept at .82. The table is
 available for all values of $y$, however great, by means of the
-formulas on page~\pageref{periodicity of hyperbolic functions}:
+formulas on page~\pageref{period-hyp-funct}:
 \begin{equation*}
 \sinh (x + 2i\pi) = \sinh x,\
    \cosh (x + 2i\pi) = \cosh x, \text{ etc.}
@@ -3370,13 +3571,19 @@ Series, and in Wheeler's Trigonometry.%
 In the following tables a dash over a final digit indicates that the
 number has been increased.
 
+
+
 \newpage
 \markright{TABLES}
 
+\subsubsection*{} %% RWD Nickalls : 
+%%% empty subsubsection{} command as a hook for \addcontentsline... and for the \label.
+%%% place this /before/ the addtocontentsline.. and before the \label
 \addcontentsline{lot}{table}{Table I.---Hyperbolic Functions}
 \index{Hyperbolic functions!tables of|(}
 \begin{center}
-\textsc{Table I.---Hyperbolic Functions.}\label{Table1p1} \\
+\textsc{Table I.---Hyperbolic Functions.}
+\label{Table1p1} \\
 \medskip\scriptsize
 \begin{tabular}{r|r|r|r||r|r|r|r}
 \hline
@@ -3552,6 +3759,8 @@ $ 1.98 $&$ 3.5523       $&$ 3.6904       $&$   962\bar{6} $
 \end{tabular} \end{center} \normalsize
 
 \newpage
+
+\subsubsection*{} %% RWD Nickalls : empty subsubsection{} command as a hook for \label
 \begin{center}
 \textsc{Table I.---Hyperbolic Functions} (\emph{continued})%
 \label{Table1p2} \\
@@ -3728,6 +3937,8 @@ $ 3.98 $&$ 26.749\bar{2} $&$ 26.767\bar{9} $&$   99930       $
 \end{tabular} \end{center} \normalsize
 
 \newpage
+
+\subsubsection*{} %% RWD Nickalls : empty subsubsection{} command as a hook for the addcontentsline...
 \begin{center}
 \addcontentsline{lot}{table}{Table II.---Values of $\cosh(x + iy)$
 and $\sinh (x + iy)$}
@@ -3881,7 +4092,10 @@ $\tfrac{1}{2}\pi $
 \hline
 \end{tabular} \normalsize
 
+
 \newpage
+
+\subsubsection*{} %% RWD Nickalls : empty subsubsection{} command as a hook for the addcontentsline...
 \textsc{Table II.---Values of $\cosh(x + iy)$ and $\sinh(x + iy)$.}
 (\emph{continued}) \\
 \footnotesize
@@ -4031,7 +4245,10 @@ $ \tfrac{1}{2}\pi$
 \hline
 \end{tabular} \normalsize
 
+
 \newpage
+
+\subsubsection*{} %% RWD Nickalls : empty subsubsection{} command as a hook for the addcontentsline...
 \textsc{Table II.---Values of $\cosh(x + iy)$ and $\sinh(x + iy)$.}
 (\emph{continued}) \\
 \footnotesize
@@ -4181,7 +4398,10 @@ $\tfrac{1}{2} \pi$
 \hline
 \end{tabular} \normalsize
 
+
 \newpage
+
+\subsubsection*{} %% RWD Nickalls : empty subsubsection{} command as a hook for the addcontentsline...
 \textsc{Table II.---Values of $\cosh(x + iy)$ and $\sinh(x + iy)$.}
 (\emph{continued}) \\
 \footnotesize
@@ -4331,7 +4551,10 @@ $\tfrac{1}{2}\pi$
 \hline
 \end{tabular} \normalsize
 
+
 \newpage
+
+\subsubsection*{} %% RWD Nickalls : empty subsubsection{} command as a hook for the addcontentsline...
 \textsc{Table III.} \\
 \addcontentsline{lot}{table}{Table III.---Values of $\gd u$ and
 $\theta^\circ$}
@@ -4623,7 +4846,7 @@ on fundamental notions} Attention has been called in Arts.\ 30 and
 37 to the work of Arthur E.\ Kennelly in applying the hyperbolic
 complex theory to the plane vectors which present themselves in the
 theory of alternating currents; and his chart has been described on
-page~\pageref{periodicity of hyperbolic functions} as a useful
+page~\pageref{period-hyp-funct} as a useful
 substitute for a numerical complex table (Proc. A.~I.~E.~E., 1895).
 It may be worth mentioning in this connection that the present
 writer's complex table in Art.\ 39 is believed to be the only one of
@@ -4660,12 +4883,17 @@ $POQ$ bears to the triangle $POQ$ a ratio whose limit is unity,
 hence the differential of the sector $S$ may be written $dS =
 \frac{1}{2}(x dy - y dx) \sin \omega = \frac{1}{2} ab \sin \omega
 (\cosh^2 u-\sinh^2 u) du = K du$. By integration $S = Ku$, hence $u=
-\frac{S}{K}$, the sectorial measure (p.~\pageref{sectoral
-measures}); this establishes the fundamental geometrical relations
+\frac{S}{K}$, the sectorial measure (p.~\pageref{sectoral-measures}); 
+this establishes the fundamental geometrical relations
 $\frac{x}{a}=\cosh \frac{S}{K}, \frac{y}{b} = \sinh \frac{S}{K}$.
 
-\addcontentsline{toc}{chapter}{Index}
-\printindex
+%%===================================================================
+%% RWD Nickalls(dick@nickalls.org)(June2018)
+%% use \backmatter command to disable chapter numbering 
+\backmatter
+
+\printindex  %% just inputs the refashioned .ind file
+%%==================================================================
 
 \newpage
 \chapter{PROJECT GUTENBERG "SMALL PRINT"}
